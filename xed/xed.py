@@ -1,9 +1,27 @@
 import argparse
+import re
 import sys
 
 
+def _replace(args, fp):
+    data = fp.read()
+    return re.sub(args.regexp, args.replacement, data)
+
+
+def _handle_command(args, func):
+    files = getattr(args, 'input-file')
+    if not files:
+        sys.stdout.write(func(args, sys.stdin))
+        return
+
+    for file_path in files:
+        with open(file_path) as f:
+            result = func(args, f)
+        sys.stdout.write(result)
+
+
 def replace(args):
-    pass
+    _handle_command(args, _replace)
 
 
 def delete(args):
