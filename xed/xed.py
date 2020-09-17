@@ -3,33 +3,35 @@ import re
 import sys
 
 
-def _replace(args, fp):
-    data = fp.read()
-    return re.sub(args.regexp, args.replacement, data)
+def _replace(args, read_fp, write_fp):
+    data = read_fp.read()
+    write_fp.write(re.sub(args.regexp, args.replacement, data))
+
+
+def _delete(args, read_fp, write_fp):
+    data = read_fp.read()
+    write_fp.write(re.sub(args.regexp, '', data))
+
+
+def _delete_lines(args, read_fp, write_fp):
+    regexp = re.compile(args.regexp)
+    while True:
+        line = read_fp.readline()
+        if not line:
+            break
+        if not regexp.search(line):
+            write_fp.write(line)
 
 
 def _handle_command(args, func):
     files = getattr(args, 'input-file')
     if not files:
-        sys.stdout.write(func(args, sys.stdin))
+        func(args, read_fp=sys.stdin, write_fp=sys.stdout)
         return
 
     for file_path in files:
         with open(file_path) as f:
-            result = func(args, f)
-        sys.stdout.write(result)
-
-
-def replace(args):
-    _handle_command(args, _replace)
-
-
-def delete(args):
-    pass
-
-
-def delete_lines(args):
-    pass
+            func(args, read_fp=f, write_fp=sys.stdout)
 
 
 def _add_common_args(parser):
@@ -45,20 +47,20 @@ def main(args):
     replace_parser.add_argument('regexp')
     replace_parser.add_argument('replacement')
     _add_common_args(replace_parser)
-    replace_parser.set_defaults(func=replace)
+    replace_parser.set_defaults(func=_replace)
 
     delete_parser = subparsers.add_parser('delete', aliases=['d'])
     delete_parser.add_argument('regexp')
     _add_common_args(delete_parser)
-    delete_parser.set_defaults(func=delete)
+    delete_parser.set_defaults(func=_delete)
 
     delete_lines_parser = subparsers.add_parser('delete-lines', aliases=['dl'])
     delete_lines_parser.add_argument('regexp')
     _add_common_args(delete_lines_parser)
-    delete_lines_parser.set_defaults(func=delete_lines)
+    delete_lines_parser.set_defaults(func=_delete_lines)
 
     args = parser.parse_args(args)
-    args.func(args)
+    _handle_command(args, func=args.func)
 
 
 if __name__ == '__main__':
