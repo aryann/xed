@@ -39,7 +39,7 @@ def _add_common_args(parser):
     parser.add_argument('--in-place', '-i', action='store_true', default=False)
 
 
-def main(args):
+def run(args):
     parser = argparse.ArgumentParser(description='xed')
     subparsers = parser.add_subparsers(required=True, dest='command')
 
@@ -63,5 +63,15 @@ def main(args):
     _handle_command(args, func=args.func)
 
 
+def cli() -> int:
+    try:
+        run(sys.argv[1:])
+    except KeyboardInterrupt:
+        return 1
+    except Exception as e:
+        print(str(e), file=sys.stderr)
+        return 1
+
+
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    sys.exit(cli())
