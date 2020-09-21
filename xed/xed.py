@@ -1,7 +1,20 @@
 import argparse
 import io
+import os
 import re
 import sys
+
+from typing import List
+
+
+def _filter_files(files: List[str]):
+    """Selects regular files from the given list."""
+    for file in sorted(files):
+        if not os.path.isfile(file):
+            sys.stderr.write(f'{file}: not a regular file')
+            sys.stderr.write('\n')
+            continue
+        yield file
 
 
 def _replace(args):
@@ -30,7 +43,7 @@ def _handle_file_command(args, func):
         func(args, read_fp=sys.stdin, write_fp=sys.stdout)
         return
 
-    for file_path in files:
+    for file_path in _filter_files(files):
         if args.in_place:
             # TODO(aryann): Instead of writing the results into an in-memory
             # buffer, consider writing the results to a temporary file as the
@@ -50,12 +63,13 @@ def _search(args):
     files = getattr(args, 'input-file')
     regexp = re.compile(args.regexp, flags=re.MULTILINE)
     matches = []
-    for file in files:
+    for file in _filter_files(files):
         with open(file) as f:
             if regexp.search(f.read()):
                 matches.append(file)
-    sys.stdout.write('\n'.join(sorted(matches)))
-    sys.stdout.write('\n')
+    if matches:
+        sys.stdout.write('\n'.join(sorted(matches)))
+        sys.stdout.write('\n')
 
 
 def run(args):

@@ -142,8 +142,11 @@ class XedTest(unittest.TestCase):
 
             xed.run(command + file_paths)
 
-        self.assertEqual(stdout.getvalue(), '\n'.join(
-            sorted(expected_matches)) + '\n')
+        if expected_matches:
+            self.assertEqual(stdout.getvalue(), '\n'.join(
+                sorted(expected_matches)) + '\n')
+        else:
+            self.assertEqual(stdout.getvalue(), '')
         self.assertEqual(stderr.getvalue(), '')
 
     def test_search(self):
@@ -173,6 +176,20 @@ class XedTest(unittest.TestCase):
                 ccc
                 ddd
                 """, matches=True))
+
+    def test_search_ignored_directories(self):
+        stdout = io.StringIO()
+        stderr = io.StringIO()
+        with tempfile.TemporaryDirectory() as temp_dir_a, \
+            tempfile.TemporaryDirectory() as temp_dir_b, \
+            contextlib.redirect_stdout(stdout), \
+                contextlib.redirect_stderr(stderr):
+            xed.run(['search', 'pattern', temp_dir_a, temp_dir_b])
+
+        self.assertEqual(stdout.getvalue(), '')
+        self.assertIn('not a regular file', stderr.getvalue())
+        self.assertIn(temp_dir_a, stderr.getvalue())
+        self.assertIn(temp_dir_b, stderr.getvalue())
 
 
 if __name__ == '__main__':
