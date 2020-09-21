@@ -177,19 +177,25 @@ class XedTest(unittest.TestCase):
                 ddd
                 """, matches=True))
 
-    def test_search_ignored_directories(self):
+    def run_command_ignores_directories_test(self, command: List[str]):
         stdout = io.StringIO()
         stderr = io.StringIO()
         with tempfile.TemporaryDirectory() as temp_dir_a, \
             tempfile.TemporaryDirectory() as temp_dir_b, \
             contextlib.redirect_stdout(stdout), \
                 contextlib.redirect_stderr(stderr):
-            xed.run(['search', 'pattern', temp_dir_a, temp_dir_b])
+            xed.run(command + [temp_dir_a, temp_dir_b])
 
         self.assertEqual(stdout.getvalue(), '')
         self.assertIn('not a regular file', stderr.getvalue())
         self.assertIn(temp_dir_a, stderr.getvalue())
         self.assertIn(temp_dir_b, stderr.getvalue())
+
+    def test_directories_are_ignored(self):
+        self.run_command_ignores_directories_test(
+            ['replace', 'pattern', 'replacement'])
+        self.run_command_ignores_directories_test(['delete', 'pattern'])
+        self.run_command_ignores_directories_test(['search', 'pattern'])
 
 
 if __name__ == '__main__':
