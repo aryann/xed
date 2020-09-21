@@ -62,6 +62,41 @@ class XedTest(unittest.TestCase):
                     hhhxyz
                     xyz
                     """))
+        self.run_test_with_files(
+            ['replace', '--in-place', 'a(.)c', r'x\1y'],
+            File(initial="""\
+                    abc
+                    aac
+                    acc
+                    """,
+                 expected="""\
+                    xby
+                    xay
+                    xcy
+                    """))
+        self.run_test_with_files(
+            ['replace', '--in-place', r'abc\nxyz', 'ZZZ'],
+            File(initial="""\
+                    hello
+                    abc
+                    xyz
+                    world
+                    """,
+                 expected="""\
+                    hello
+                    ZZZ
+                    world
+                    """))
+        self.run_test_with_files(
+            ['replace', '--in-place', 'non-existent-pattern', 'aaa'],
+            File(initial="""\
+                    hello
+                    world
+                    """,
+                 expected="""\
+                    hello
+                    world
+                    """))
 
 
 if __name__ == '__main__':
