@@ -15,16 +15,6 @@ def _delete(args, read_fp, write_fp):
     write_fp.write(re.sub(args.regexp, '', data, flags=re.MULTILINE))
 
 
-def _delete_lines(args, read_fp, write_fp):
-    regexp = re.compile(args.regexp)
-    while True:
-        line = read_fp.readline()
-        if not line:
-            break
-        if not regexp.search(line):
-            write_fp.write(line)
-
-
 def _handle_command(args, func):
     files = getattr(args, 'input-file')
     if not files:
@@ -66,11 +56,6 @@ def run(args):
     delete_parser.add_argument('regexp')
     _add_common_args(delete_parser)
     delete_parser.set_defaults(func=_delete)
-
-    delete_lines_parser = subparsers.add_parser('delete-lines', aliases=['dl'])
-    delete_lines_parser.add_argument('regexp')
-    _add_common_args(delete_lines_parser)
-    delete_lines_parser.set_defaults(func=_delete_lines)
 
     args = parser.parse_args(args)
     _handle_command(args, func=args.func)
