@@ -3,6 +3,7 @@ import io
 import os
 import re
 import sys
+import textwrap
 
 from typing import List
 
@@ -73,15 +74,50 @@ def _search(args):
 
 
 def run(args):
-    parser = argparse.ArgumentParser(description='xed')
+    parser = argparse.ArgumentParser(
+        description=textwrap.dedent("""\
+            xed is a utility for performing basic text transformations. It is
+            inspired by the popular command-line tool sed, while striving to be
+            as simple as possible.
+            """))
     subparsers = parser.add_subparsers(required=True, dest='command')
 
-    replace_parser = subparsers.add_parser('replace', aliases=['r'])
-    replace_parser.add_argument('regexp')
-    replace_parser.add_argument('replacement')
-    replace_parser.add_argument('input-file', nargs='*')
+    replace_parser = subparsers.add_parser(
+        'replace', aliases=['r'],
+        description=textwrap.dedent("""\
+            Replace input text that matches a regular expression with a
+            replacement text. The regular expression format follows the Python 3
+            regular expression syntax
+            (https://docs.python.org/3/library/re.html#regular-expression-syntax).
+            The replacement text may contain references to capture groups.
+
+            The input may either be a list of one or more file paths given as
+            positional arguments or standard input if no files are provided. The
+            output is written to standard out by default.
+            """))
     replace_parser.add_argument(
-        '--in-place', '-i', action='store_true', default=False)
+        'regexp',
+        help=textwrap.dedent("""\
+            The regular expression. Any text matching this value will be
+            replaced. The regular expression may contain newlines.
+            """))
+    replace_parser.add_argument(
+        'replacement',
+        help=textwrap.dedent("""\
+            The replacement text. This value may contain capture group references.
+        """))
+    replace_parser.add_argument(
+        'input-file', nargs='*',
+        help=textwrap.dedent("""\
+            Zero or more file paths that will be the subject of the replacement. If
+            no files are provided, then the input is consumed from standard in.
+            """))
+    replace_parser.add_argument(
+        '--in-place', '-i', action='store_true', default=False,
+        help=textwrap.dedent("""\
+            If provided and the input is a set of files, then the files are
+            modified with the outcome and nothing is printed to standard out.
+            """))
     replace_parser.set_defaults(func=_replace)
 
     delete_parser = subparsers.add_parser('delete', aliases=['d'])
