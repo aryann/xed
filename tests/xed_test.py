@@ -1,4 +1,6 @@
 import collections
+import contextlib
+import io
 import os
 import tempfile
 import textwrap
@@ -15,7 +17,11 @@ File = collections.namedtuple('File', ['initial', 'expected'])
 class XedTest(unittest.TestCase):
 
     def run_test_with_files(self, command: List[str], *files: File):
-        with tempfile.TemporaryDirectory() as temp_dir:
+        stdout = io.StringIO()
+        stderr = io.StringIO()
+        with tempfile.TemporaryDirectory() as temp_dir, \
+                contextlib.redirect_stdout(stdout), \
+                contextlib.redirect_stderr(stderr):
             file_paths: List[str] = []
             for i, file in enumerate(files):
                 file_paths.append(os.path.join(temp_dir, str(i)))
@@ -28,6 +34,8 @@ class XedTest(unittest.TestCase):
                 with open(file_path) as f:
                     actual = f.read()
                 self.assertEqual(actual, textwrap.dedent(file.expected))
+        self.assertEqual(stdout.getvalue(), '')
+        self.assertEqual(stderr.getvalue(), '')
 
     def testReplace(self):
         self.run_test_with_files(
