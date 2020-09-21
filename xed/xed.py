@@ -40,7 +40,7 @@ def _handle_file_command(args, func):
     # TODO(aryann): Compile the regexp once.
     files = getattr(args, 'input-file')
     if not files:
-        func(args, read_fp=sys.stdin, write_fp=sys.stdout)
+        func(read_fp=sys.stdin, write_fp=sys.stdout)
         return
 
     for file_path in _filter_files(files):

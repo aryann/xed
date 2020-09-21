@@ -125,6 +125,93 @@ class XedTest(unittest.TestCase):
                     aaworld
                     """))
 
+    def test_delete(self):
+        self.run_test_with_files(
+            ['delete', '--in-place', 'a'],
+            ModifyTest(initial='a', expected=''))
+        self.run_test_with_files(
+            ['delete', '--in-place', 'a'],
+            ModifyTest(initial='abcabcabc', expected='bcbcbc'))
+        self.run_test_with_files(
+            ['delete', '--in-place', 'a'],
+            ModifyTest(initial='ccc', expected='ccc'))
+        self.run_test_with_files(
+            ['delete', '--in-place', '.'],
+            ModifyTest(initial='abcdefg', expected=''))
+        self.run_test_with_files(
+            ['delete', '--in-place', 'abc'],
+            ModifyTest(initial="""\
+                    hello
+                    abc
+                    world
+                    gggabchhh
+                    abcggg
+                    hhhabc
+                    abc
+                    """,
+                       expected="""\
+                    hello
+
+                    world
+                    ggghhh
+                    ggg
+                    hhh
+
+                    """))
+        self.run_test_with_files(
+            ['delete', '--in-place', 'a.c'],
+            ModifyTest(initial="""\
+                    abc
+                    aac
+                    acc
+                    """,
+                       expected="""\
+
+
+
+                    """))
+        self.run_test_with_files(
+            ['delete', '--in-place', r'abc\nxyz'],
+            ModifyTest(initial="""\
+                    hello
+                    abc
+                    xyz
+                    world
+                    """,
+                       expected="""\
+                    hello
+
+                    world
+                    """))
+        self.run_test_with_files(
+            ['delete', '--in-place', 'non-existent-pattern'],
+            ModifyTest(initial="""\
+                    hello
+                    world
+                    """,
+                       expected="""\
+                    hello
+                    world
+                    """))
+        self.run_test_with_files(
+            ['delete', '--in-place', '^aaa\w+'],
+            ModifyTest(initial="""\
+                    hello
+                    aaa
+                    aaaworld
+                    aaagoodbye
+                    aaa123
+                    aaworld
+                    """,
+                       expected="""\
+                    hello
+                    aaa
+
+
+                    
+                    aaworld
+                    """))
+
     def run_search_test(self,  command: List[str], *files: SearchTest):
         stdout = io.StringIO()
         stderr = io.StringIO()
@@ -181,8 +268,8 @@ class XedTest(unittest.TestCase):
         stdout = io.StringIO()
         stderr = io.StringIO()
         with tempfile.TemporaryDirectory() as temp_dir_a, \
-            tempfile.TemporaryDirectory() as temp_dir_b, \
-            contextlib.redirect_stdout(stdout), \
+                tempfile.TemporaryDirectory() as temp_dir_b, \
+                contextlib.redirect_stdout(stdout), \
                 contextlib.redirect_stderr(stderr):
             xed.run(command + [temp_dir_a, temp_dir_b])
 
