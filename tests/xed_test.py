@@ -97,6 +97,24 @@ class XedTest(unittest.TestCase):
                     hello
                     world
                     """))
+        self.run_test_with_files(
+            ['replace', '--in-place', '^aaa(\w+)', r'\1'],
+            File(initial="""\
+                    hello
+                    aaa
+                    aaaworld
+                    aaagoodbye
+                    aaa123
+                    aaworld
+                    """,
+                 expected="""\
+                    hello
+                    aaa
+                    world
+                    goodbye
+                    123
+                    aaworld
+                    """))
 
 
 if __name__ == '__main__':

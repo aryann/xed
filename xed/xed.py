@@ -6,12 +6,13 @@ import sys
 
 def _replace(args, read_fp, write_fp):
     data = read_fp.read()
-    write_fp.write(re.sub(args.regexp, args.replacement, data))
+    write_fp.write(re.sub(args.regexp, args.replacement,
+                          data, flags=re.MULTILINE))
 
 
 def _delete(args, read_fp, write_fp):
     data = read_fp.read()
-    write_fp.write(re.sub(args.regexp, '', data))
+    write_fp.write(re.sub(args.regexp, '', data, flags=re.MULTILINE))
 
 
 def _delete_lines(args, read_fp, write_fp):
