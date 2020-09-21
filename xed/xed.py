@@ -1,4 +1,5 @@
 import argparse
+import io
 import re
 import sys
 
@@ -30,8 +31,19 @@ def _handle_command(args, func):
         return
 
     for file_path in files:
-        with open(file_path) as f:
-            func(args, read_fp=f, write_fp=sys.stdout)
+        if args.in_place:
+            # TODO(aryann): Instead of writing the results into an in-memory
+            # buffer, consider writing the results to a temporary file as the
+            # input is being processed and swapping the temporary file with the
+            # input.
+            result = io.StringIO()
+            with open(file_path) as f:
+                func(args, read_fp=f, write_fp=result)
+            with open(file_path, 'w') as f:
+                f.write(result.getvalue())
+        else:
+            with open(file_path) as f:
+                func(args, read_fp=f, write_fp=sys.stdout)
 
 
 def _add_common_args(parser):
@@ -66,6 +78,7 @@ def run(args):
 def cli() -> int:
     try:
         run(sys.argv[1:])
+        return 0
     except KeyboardInterrupt:
         return 1
     except Exception as e:
