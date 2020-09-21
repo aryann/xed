@@ -55,6 +55,7 @@ def _search(args):
             if regexp.search(f.read()):
                 matches.append(file)
     sys.stdout.write('\n'.join(sorted(matches)))
+    sys.stdout.write('\n')
 
 
 def run(args):

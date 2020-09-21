@@ -143,7 +143,7 @@ class XedTest(unittest.TestCase):
             xed.run(command + file_paths)
 
         self.assertEqual(stdout.getvalue(), '\n'.join(
-            sorted(expected_matches)))
+            sorted(expected_matches)) + '\n')
         self.assertEqual(stderr.getvalue(), '')
 
     def test_search(self):
