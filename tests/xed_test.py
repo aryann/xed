@@ -11,12 +11,13 @@ from typing import List
 import xed
 
 
-File = collections.namedtuple('File', ['initial', 'expected'])
+ModifyTest = collections.namedtuple('ModifyTest', ['initial', 'expected'])
+SearchTest = collections.namedtuple('SearchTest', ['content', 'matches'])
 
 
 class XedTest(unittest.TestCase):
 
-    def run_test_with_files(self, command: List[str], *files: File):
+    def run_test_with_files(self, command: List[str], *files: ModifyTest):
         stdout = io.StringIO()
         stderr = io.StringIO()
         with tempfile.TemporaryDirectory() as temp_dir, \
@@ -37,22 +38,22 @@ class XedTest(unittest.TestCase):
         self.assertEqual(stdout.getvalue(), '')
         self.assertEqual(stderr.getvalue(), '')
 
-    def testReplace(self):
+    def test_replace(self):
         self.run_test_with_files(
             ['replace', '--in-place', 'a', 'b'],
-            File(initial='a', expected='b'))
+            ModifyTest(initial='a', expected='b'))
         self.run_test_with_files(
             ['replace', '--in-place', 'a', 'b'],
-            File(initial='abcabcabc', expected='bbcbbcbbc'))
+            ModifyTest(initial='abcabcabc', expected='bbcbbcbbc'))
         self.run_test_with_files(
             ['replace', '--in-place', 'a', 'b'],
-            File(initial='ccc', expected='ccc'))
+            ModifyTest(initial='ccc', expected='ccc'))
         self.run_test_with_files(
             ['replace', '--in-place', '.', 'b'],
-            File(initial='abcdefg', expected='bbbbbbb'))
+            ModifyTest(initial='abcdefg', expected='bbbbbbb'))
         self.run_test_with_files(
             ['replace', '--in-place', 'abc', 'xyz'],
-            File(initial="""\
+            ModifyTest(initial="""\
                     hello
                     abc
                     world
@@ -61,7 +62,7 @@ class XedTest(unittest.TestCase):
                     hhhabc
                     abc
                     """,
-                 expected="""\
+                       expected="""\
                     hello
                     xyz
                     world
@@ -72,42 +73,42 @@ class XedTest(unittest.TestCase):
                     """))
         self.run_test_with_files(
             ['replace', '--in-place', 'a(.)c', r'x\1y'],
-            File(initial="""\
+            ModifyTest(initial="""\
                     abc
                     aac
                     acc
                     """,
-                 expected="""\
+                       expected="""\
                     xby
                     xay
                     xcy
                     """))
         self.run_test_with_files(
             ['replace', '--in-place', r'abc\nxyz', 'ZZZ'],
-            File(initial="""\
+            ModifyTest(initial="""\
                     hello
                     abc
                     xyz
                     world
                     """,
-                 expected="""\
+                       expected="""\
                     hello
                     ZZZ
                     world
                     """))
         self.run_test_with_files(
             ['replace', '--in-place', 'non-existent-pattern', 'aaa'],
-            File(initial="""\
+            ModifyTest(initial="""\
                     hello
                     world
                     """,
-                 expected="""\
+                       expected="""\
                     hello
                     world
                     """))
         self.run_test_with_files(
             ['replace', '--in-place', '^aaa(\w+)', r'\1'],
-            File(initial="""\
+            ModifyTest(initial="""\
                     hello
                     aaa
                     aaaworld
@@ -115,7 +116,7 @@ class XedTest(unittest.TestCase):
                     aaa123
                     aaworld
                     """,
-                 expected="""\
+                       expected="""\
                     hello
                     aaa
                     world
@@ -123,6 +124,55 @@ class XedTest(unittest.TestCase):
                     123
                     aaworld
                     """))
+
+    def run_search_test(self,  command: List[str], *files: SearchTest):
+        stdout = io.StringIO()
+        stderr = io.StringIO()
+        with tempfile.TemporaryDirectory() as temp_dir, \
+                contextlib.redirect_stdout(stdout), \
+                contextlib.redirect_stderr(stderr):
+            file_paths: List[str] = []
+            expected_matches: List[str] = []
+            for i, file in enumerate(files):
+                file_paths.append(os.path.join(temp_dir, str(i)))
+                with open(file_paths[-1], 'w') as f:
+                    f.write(textwrap.dedent(file.content))
+                if file.matches:
+                    expected_matches.append(file_paths[-1])
+
+            xed.run(command + file_paths)
+
+        self.assertEqual(stdout.getvalue(), '\n'.join(
+            sorted(expected_matches)))
+        self.assertEqual(stderr.getvalue(), '')
+
+    def test_search(self):
+        self.run_search_test(
+            ['search', 'a'],
+            SearchTest(content='aaaa', matches=True))
+        self.run_search_test(
+            ['search', 'b'],
+            SearchTest(content='aaaa', matches=False))
+        self.run_search_test(
+            ['search', 'a'],
+            SearchTest(content='aaaa', matches=True),
+            SearchTest(content='bbbb', matches=False),
+            SearchTest(content='abc', matches=True))
+        self.run_search_test(
+            ['search', 'hello'],
+            SearchTest(content="""\
+                aaa
+                hello
+                bbb
+                """, matches=True))
+        self.run_search_test(
+            ['search', r'bb\ncc'],
+            SearchTest(content="""\
+                aaa
+                bbb
+                ccc
+                ddd
+                """, matches=True))
 
 
 if __name__ == '__main__':
