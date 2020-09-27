@@ -29,6 +29,9 @@ setuptools.setup(
         'Programming Language :: Python :: 3.7',
         'Topic :: Utilities',
     ],
+    packages=[
+        'xed',
+    ],
     entry_points={
         'console_scripts': [
             'xed=xed.xed:cli',
