@@ -1,8 +1,9 @@
 import argparse
-import io
 import os
 import re
+import shutil
 import sys
+import tempfile
 import textwrap
 
 from typing import List
@@ -48,15 +49,10 @@ def _handle_file_command(args, func):
 
     for file_path in _filter_files(files):
         if args.in_place:
-            # TODO(aryann): Instead of writing the results into an in-memory
-            # buffer, consider writing the results to a temporary file as the
-            # input is being processed and swapping the temporary file with the
-            # input.
-            result = io.StringIO()
-            with open(file_path) as f:
-                func(read_fp=f, write_fp=result)
-            with open(file_path, 'w') as f:
-                f.write(result.getvalue())
+            with tempfile.NamedTemporaryFile(mode='w', delete=False) as write_fp, \
+                    open(file_path) as read_fp:
+                func(read_fp=read_fp, write_fp=write_fp)
+            shutil.move(write_fp.name, file_path)
         else:
             with open(file_path) as f:
                 func(read_fp=f, write_fp=sys.stdout)
