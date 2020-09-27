@@ -7,6 +7,8 @@ import textwrap
 
 from typing import List
 
+_RE_FLAGS = re.MULTILINE | re.DOTALL
+
 
 def _filter_files(files: List[str]):
     """Selects regular files from the given list."""
@@ -23,7 +25,7 @@ def _replace(args):
     def replace_one(read_fp, write_fp):
         data = read_fp.read()
         write_fp.write(re.sub(args.regexp, args.replacement,
-                              data, flags=re.MULTILINE))
+                              data, flags=_RE_FLAGS))
 
     _handle_file_command(args, replace_one)
 
@@ -32,7 +34,7 @@ def _delete(args):
 
     def delete_one(read_fp, write_fp):
         data = read_fp.read()
-        write_fp.write(re.sub(args.regexp, '', data, flags=re.MULTILINE))
+        write_fp.write(re.sub(args.regexp, '', data, flags=_RE_FLAGS))
 
     _handle_file_command(args, delete_one)
 
@@ -62,7 +64,7 @@ def _handle_file_command(args, func):
 
 def _search(args):
     files = getattr(args, 'input-file')
-    regexp = re.compile(args.regexp, flags=re.MULTILINE)
+    regexp = re.compile(args.regexp, flags=_RE_FLAGS)
     matches = []
     for file in _filter_files(files):
         with open(file) as f:

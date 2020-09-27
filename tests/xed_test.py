@@ -124,6 +124,27 @@ class XedTest(unittest.TestCase):
                     123
                     aaworld
                     """))
+        self.run_test_with_files(
+            ['replace', '--in-place', 'from.*one', 'replacement'],
+            ModifyTest(initial="""\
+                    replace
+                    from
+                    this
+                    line
+                    until
+                    this
+                    one
+                    but
+                    no
+                    more
+                    """,
+                       expected="""\
+                    replace
+                    replacement
+                    but
+                    no
+                    more
+                    """))
 
     def test_delete(self):
         self.run_test_with_files(
@@ -210,6 +231,26 @@ class XedTest(unittest.TestCase):
 
                     
                     aaworld
+                    """))
+        self.run_test_with_files(
+            ['delete', '--in-place', 'from.*one\n'],
+            ModifyTest(initial="""\
+                    delete
+                    from
+                    this
+                    line
+                    until
+                    this
+                    one
+                    but
+                    no
+                    more
+                    """,
+                       expected="""\
+                    delete
+                    but
+                    no
+                    more
                     """))
 
     def run_search_test(self,  command: List[str], *files: SearchTest):
