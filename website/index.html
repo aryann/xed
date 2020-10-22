@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>xed</title>
+
+    <meta property="og:title" content="xed" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="xed is a utility for performing basic text transformations, modeled after the popular command-line tool sed. xed provides a more intuitive interface and supports multi-line regular expressions by default."
+    />
+    <meta
+      property="og:description"
+      content="xed is a utility for performing basic text transformations, modeled after the popular command-line tool sed. xed provides a more intuitive interface and supports multi-line regular expressions by default."
+    />
+    <link rel="canonical" href="http://example.com/" />
+    <meta property="og:url" content="http://example.com/" />
+    <meta property="og:site_name" content="xed" />
+    <script type="application/ld+json">
+      {
+        "@type": "WebSite",
+        "url": "http://example.com",
+        "name": "xed",
+        "author": {
+          "@type": "Person",
+          "name": "Aryan Naraghi",
+          "email": "aryan.naraghi@gmail.com",
+          "url": "https://aryan.app"
+        },
+        "headline": "xed",
+        "description": "xed is a utility for performing basic text transformations, modeled after the popular command-line tool sed. xed provides a more intuitive interface and supports multi-line regular expressions by default.",
+        "@context": "https://schema.org"
+      }
+    </script>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="main">
+      <h1>xed</h1>
+
+      <p>
+        xed is a utility for performing basic text transformations, modeled
+        after the popular command-line tool
+        <a href="https://en.wikipedia.org/wiki/Sed">sed</a>. xed provides a more
+        intuitive interface and supports multi-line regular expressions by
+        default.
+      </p>
+
+      <p>Example usage:</p>
+
+      <pre><code>$ echo "Hello, world!" | xed replace Hello Goodbye
+Goodbye, world!</code></pre>
+
+      <p>Read on to learn more about xed.</p>
+
+      <h2>Table of Contents</h2>
+
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+        <li>
+          <a href="#usage">Usage</a>
+          <ul>
+            <li><a href="#replacing-text">Replacing Text</a></li>
+            <li><a href="#deleting-text">Deleting Text</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <h2 id="installation"><a href="#installation">Installation</a></h2>
+
+      <p>
+        xed can run on any system that has Python 3.6 or higher installed. To
+        install Python, refer to
+        <a href="https://www.python.org/about/gettingstarted/"
+          >Python's Getting Started guide</a
+        >.
+      </p>
+
+      <p>To install xed, run:</p>
+
+      <pre><code>$ pip install xed</code></pre>
+
+      <h2 id="usage"><a href="#usage">Usage</a></h2>
+
+      <h3>Overview</h3>
+
+      <h4>Inputs</h4>
+      <p>
+        All xed commands that manipulate text read data from standard input,
+        unless one or more file paths are provided as positional arguments.
+        Consider this standard input example:
+      </p>
+
+      <pre><code>$ echo "Hello, world!" | xed replace Hello Goodbye
+Goodbye, world!</code></pre>
+
+      <p>... and this file example:</p>
+
+      <pre><code>$ echo "Hello, world!" > my-file.txt
+$ xed replace Hello Goodbye my-file.txt
+Goodbye, world!
+</code></pre>
+
+      <h4>Outputs</h4>
+      <p>
+        By default, the results of the commands that manipulate text are written
+        to standard output. If the input is one or more files, you can use the
+        flag
+        <code>--in-place</code> or its shorthand <code>-i</code>:
+      </p>
+
+      <pre><code>$ echo "Hello, world!" > my-file.txt
+$ xed replace Hello Goodbye my-file.txt --in-place
+$ cat my-file.txt
+Goodbye, world!</code></pre>
+
+      <h3>Text Manipulation</h3>
+
+      <h4 id="replacing-text"><a href="#replacing-text">Replacing Text</a></h4>
+
+      <p>
+        The replace command takes a regular expression and replaces each
+        matching instance with a replacement text. For example, the following
+        invocation replaces all numbers with the letter <code>N</code>:
+      </p>
+
+      <pre><code>$ echo 1bbb123ccc123456ddd | xed replace [0-9]+ a
+NbbbNcccNddd</code></pre>
+
+      <p>
+        xed uses the regular expression engine that powers
+        <a href="https://docs.python.org/3/library/re.html"
+          >Python's <code>re</code> module</a
+        >, with the
+        <a href="https://docs.python.org/3/library/re.html#re.MULTILINE"
+          ><code>MULTILINE</code></a
+        >
+        and
+        <a href="https://docs.python.org/3/library/re.html#re.DOTALL"
+          ><code>DOTALL</code></a
+        >
+        options enabled. We recommend referring to the Python documentation for
+        guidance on the regular expression syntax.
+      </p>
+
+      <h4 id="deleting-text"><a href="#deleting-text">Deleting Text</a></h4>
+    </div>
+  </body>
+</html>

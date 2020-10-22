@@ -1,0 +1,47 @@
+html {
+  height: 100%;
+}
+
+body {
+  font-family: monospace;
+  font-size: 1.3rem;
+  line-height: 1.3;
+  margin: 0;
+  min-height: 100%;
+}
+
+h2,
+h3,
+h4,
+h5 {
+  margin-top: 2rem;
+}
+
+p {
+  margin: 1rem 0;
+}
+
+li {
+  margin: 0.4rem 0;
+}
+
+*:target {
+  background-color: yellow;
+}
+
+.main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+code {
+  background-color: #eee;
+}
+
+pre code {
+  border: 1px solid black;
+  display: block;
+  overflow-x: auto;
+  padding: 1rem;
+}
