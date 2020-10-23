@@ -72,12 +72,14 @@ def _search(args):
 
 
 def run(args):
-    parser = argparse.ArgumentParser(
-        description=textwrap.dedent("""\
-            xed is a utility for performing basic text transformations. It is
-            inspired by the popular command-line tool sed, while striving to be
-            as simple as possible.
-            """))
+    parser = argparse.ArgumentParser(description=textwrap.dedent("""\
+        xed is a command-line tool for performing basic text transformations,
+        modeled after the utility sed. xed provides an intuitive interface and
+        supports multi-line regular expressions by default.
+
+        For more information, visit https://xed.aryan.app.
+        """))
+
     subparsers = parser.add_subparsers(required=True, dest='command')
 
     replace_parser = subparsers.add_parser(

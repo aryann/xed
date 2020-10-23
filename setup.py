@@ -9,7 +9,7 @@ with open(os.path.join(os.path.dirname(os.path.realpath(__file__)),
 
 setuptools.setup(
     name='xed',
-    version='0.0.3',
+    version='0.0.4',
     author='Aryan Naraghi',
     author_email='aryan.naraghi@gmail.com',
     description=('A utility for performing basic text transformations.'),
@@ -18,6 +18,7 @@ setuptools.setup(
     project_urls={
         'Source Code': 'https://github.com/aryann/xed',
         "Author's Website": 'https://aryan.app',
+        'Documentation': 'https://xed.aryan.app',
     },
     python_requires='>=3.6',
     classifiers=[
