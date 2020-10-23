@@ -9,7 +9,7 @@ with open(os.path.join(os.path.dirname(os.path.realpath(__file__)),
 
 setuptools.setup(
     name='xed',
-    version='0.0.4',
+    version='0.0.5',
     author='Aryan Naraghi',
     author_email='aryan.naraghi@gmail.com',
     description=('A utility for performing basic text transformations.'),

@@ -1,7 +1,7 @@
-# `xed`
+# xed
 
-`xed` is a utility for performing basic text transformations. `xed` is modeled
-after the popular command-line tool `sed`.
+xed is a command-line tool for performing basic text transformations, modeled
+after the utility [sed](https://en.wikipedia.org/wiki/Sed).
 
 Example invocation:
 
@@ -9,3 +9,5 @@ Example invocation:
 $ echo "Hello, world!" | xed replace Hello Goodbye
 Goodbye, world
 ```
+
+For more information, [visit xed's website](https://xed.aryan.app).
