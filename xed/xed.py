@@ -73,8 +73,8 @@ def _search(args):
 
 def run(args):
     parser = argparse.ArgumentParser(description=textwrap.dedent("""\
-        xed is a command-line tool for performing basic text transformations,
-        modeled after the utility sed. xed provides an intuitive interface and
+        xed is a command-line tool for performing basic text transformations.
+        Modeled after the utility sed, xed provides an intuitive interface and
         supports multi-line regular expressions by default.
 
         For more information, visit https://xed.aryan.app.

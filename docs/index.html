@@ -23,11 +23,11 @@
     <meta property="og:locale" content="en_US" />
     <meta
       name="description"
-      content="xed is a command-line tool for performing basic text transformations, modeled after the utility sed. xed provides an intuitive interface and supports multi-line regular expressions by default."
+      content="xed is a command-line tool for performing basic text transformations. Modeled after the utility sed, xed provides an intuitive interface and supports multi-line regular expressions by default."
     />
     <meta
       property="og:description"
-      content="xed is a command-line tool for performing basic text transformations, modeled after the utility sed. xed provides an intuitive interface and supports multi-line regular expressions by default."
+      content="xed is a command-line tool for performing basic text transformations. Modeled after the utility sed, xed provides an intuitive interface and supports multi-line regular expressions by default."
     />
     <link rel="canonical" href="https://xed.aryan.app" />
     <meta property="og:url" content="https://xed.aryan.app" />
@@ -44,7 +44,7 @@
           "url": "https://aryan.app"
         },
         "headline": "xed",
-        "description": "xed is a command-line tool for performing basic text transformations, modeled after the utility sed. xed provides an intuitive interface and supports multi-line regular expressions by default.",
+        "description": "xed is a command-line tool for performing basic text transformations. Modeled after the utility sed, xed provides an intuitive interface and supports multi-line regular expressions by default.",
         "@context": "https://schema.org"
       }
     </script>
@@ -56,9 +56,9 @@
       <h1>xed</h1>
 
       <p>
-        xed is a command-line tool for performing basic text transformations,
-        modeled after the utility
-        <a href="https://en.wikipedia.org/wiki/Sed">sed</a>. xed provides an
+        xed is a command-line tool for performing basic text transformations.
+        Modeled after the utility
+        <a href="https://en.wikipedia.org/wiki/Sed">sed</a>, xed provides an
         intuitive interface and supports multi-line regular expressions by
         default.
       </p>
@@ -116,15 +116,15 @@ Goodbye, world!</code></pre>
       <h3 id="getting-help"><a href="#getting-help">Getting Help</a></h3>
 
       <p>
-        Once installed you can use the <code>--help</code> flag to learn more
+        Once installed, you can use the <code>--help</code> flag to learn more
         about xed. For example, to see the set of commands offered, run:
       </p>
 
       <pre><code>$ xed --help</code></pre>
 
       <p>
-        You can also get more information about specific Commands. The following
-        example show how to get more details about the
+        You can also get more information about specific commands. The following
+        example shows how to get more details about the
         <code>replace</code> command:
       </p>
 
@@ -140,7 +140,7 @@ Goodbye, world!</code></pre>
       <pre><code>$ echo 'Hello, world!' | xed replace Hello Goodbye
 Goodbye, world!</code></pre>
 
-      <p>... and this file example:</p>
+      <p>And this file example:</p>
 
       <pre><code>$ echo 'Hello, world!' > my-file.txt
 $ xed replace Hello Goodbye my-file.txt
@@ -249,16 +249,15 @@ Hello, world!</code></pre>
       <p>
         Sometimes you need to modify only files that match a regular expression
         that is different than the regular expression given to the
-        <code>replace</code> command. <code>grep</code> can be used for this
-        kind of filtering, but it's awkward to use because, by default,
-        <code>grep</code> neither prints the matching file names nor uses a
-        regular expression syntax compatible with Python's
-        <code>re</code> module.
+        <code>replace</code> or <code>delete</code> command.
+        <code>grep</code> can be used for this kind of filtering, but it's
+        awkward to use because, by default, <code>grep</code>'s output includes
+        more than the file names and <code>grep</code> uses a regular expression
+        syntax not compatible with Python's <code>re</code> module.
       </p>
 
       <p>
-        <code>search</code> is meant to simplify this use-case. Consider this
-        example:
+        <code>search</code> simplifies this use-case. Consider this example:
       </p>
 
       <pre><code>$ echo 'Hello, world!' > my-file.txt
