@@ -10,11 +10,11 @@
     <meta property="og:locale" content="en_US" />
     <meta
       name="description"
-      content="xed is a command-line tool for performing basic text transformations, modeled after the utility sed. xed provides a more intuitive interface and supports multi-line regular expressions by default."
+      content="xed is a command-line tool for performing basic text transformations, modeled after the utility sed. xed provides an intuitive interface and supports multi-line regular expressions by default."
     />
     <meta
       property="og:description"
-      content="xed is a command-line tool for performing basic text transformations, modeled after the utility sed. xed provides a more intuitive interface and supports multi-line regular expressions by default."
+      content="xed is a command-line tool for performing basic text transformations, modeled after the utility sed. xed provides an intuitive interface and supports multi-line regular expressions by default."
     />
     <link rel="canonical" href="https://xed.aryan.app" />
     <meta property="og:url" content="https://xed.aryan.app" />
@@ -31,7 +31,7 @@
           "url": "https://aryan.app"
         },
         "headline": "xed",
-        "description": "xed is a command-line tool for performing basic text transformations, modeled after the utility sed. xed provides a more intuitive interface and supports multi-line regular expressions by default.",
+        "description": "xed is a command-line tool for performing basic text transformations, modeled after the utility sed. xed provides an intuitive interface and supports multi-line regular expressions by default.",
         "@context": "https://schema.org"
       }
     </script>
@@ -45,14 +45,14 @@
       <p>
         xed is a command-line tool for performing basic text transformations,
         modeled after the utility
-        <a href="https://en.wikipedia.org/wiki/Sed">sed</a>. xed provides a more
+        <a href="https://en.wikipedia.org/wiki/Sed">sed</a>. xed provides an
         intuitive interface and supports multi-line regular expressions by
         default.
       </p>
 
       <p>Example usage:</p>
 
-      <pre><code>$ echo "Hello, world!" | xed replace Hello Goodbye
+      <pre><code>$ echo 'Hello, world!' | xed replace Hello Goodbye
 Goodbye, world!</code></pre>
 
       <p>Read on to learn more.</p>
@@ -62,29 +62,25 @@ Goodbye, world!</code></pre>
       <ul>
         <li><a href="#installation">Installation</a></li>
         <li>
-          <a href="#usage">Usage</a>
+          <a href="#overview">Overview</a>
           <ul>
-            <li>
-              <a href="#overview">Overview</a>
-              <ul>
-                <li><a href="#inputs">Inputs</a></li>
-                <li><a href="#outputs">Outputs</a></li>
-              </ul>
-            </li>
-            <a href="#commands">Commands</a>
-            <ul>
-              <li>
-                <a href="#replace"><code>replace</code></a>
-              </li>
-              <li>
-                <a href="#delete"><code>delete</code></a>
-              </li>
-              <li>
-                <a href="#search"><code>search</code></a>
-              </li>
-            </ul>
+            <li><a href="#getting-help">Getting Help</a></li>
+            <li><a href="#inputs">Inputs</a></li>
+            <li><a href="#outputs">Outputs</a></li>
           </ul>
         </li>
+        <a href="#commands">Commands</a>
+        <ul>
+          <li>
+            <a href="#replace"><code>replace</code></a>
+          </li>
+          <li>
+            <a href="#delete"><code>delete</code></a>
+          </li>
+          <li>
+            <a href="#search"><code>search</code></a>
+          </li>
+        </ul>
         <li><a href="#more-info">More Information</a></li>
       </ul>
 
@@ -102,33 +98,49 @@ Goodbye, world!</code></pre>
 
       <pre><code>$ pip install xed</code></pre>
 
-      <h2 id="usage"><a href="#usage">Usage</a></h2>
+      <h2 id="overview"><a href="#overview">Overview</a></h2>
 
-      <h3 id="overview"><a href="#overview">Overview</a></h3>
+      <h3 id="getting-help"><a href="#getting-help">Getting Help</a></h3>
 
-      <h4 id="inputs"><a href="#inputs">Inputs</a></h4>
+      <p>
+        Once installed you can use the <code>--help</code> flag to learn more
+        about xed. For example, to see the set of commands offered, run:
+      </p>
+
+      <pre><code>$ xed --help</code></pre>
+
+      <p>
+        You can also get more information about specific Commands. The following
+        example show how to get more details about the
+        <code>replace</code> command:
+      </p>
+
+      <pre><code>$ xed replace --help</code></pre>
+
+      <h3 id="inputs"><a href="#inputs">Inputs</a></h3>
       <p>
         All xed commands that manipulate text read data from standard input,
         unless one or more file paths are provided as positional arguments.
         Consider this standard input example:
       </p>
 
-      <pre><code>$ echo "Hello, world!" | xed replace Hello Goodbye
+      <pre><code>$ echo 'Hello, world!' | xed replace Hello Goodbye
 Goodbye, world!</code></pre>
 
       <p>... and this file example:</p>
 
-      <pre><code>$ echo "Hello, world!" > my-file.txt
+      <pre><code>$ echo 'Hello, world!' > my-file.txt
 $ xed replace Hello Goodbye my-file.txt
 Goodbye, world!
 </code></pre>
 
-      <h4 id="outputs"><a href="#outputs">Outputs</a></h4>
+      <h3 id="outputs"><a href="#outputs">Outputs</a></h3>
+
       <p>
         By default, the results of the commands that manipulate text are written
         to standard output. If the input is one or more files, you can use the
-        flag
-        <code>--in-place</code> or its shorthand <code>-i</code>:
+        <code>--in-place</code> flag or its <code>-i</code> shorthand to
+        overwrite the files in-place:
       </p>
 
       <pre><code>$ echo "Hello, world!" > my-file.txt
@@ -136,11 +148,11 @@ $ xed replace Hello Goodbye my-file.txt --in-place
 $ cat my-file.txt
 Goodbye, world!</code></pre>
 
-      <h3 id="commands"><a href="#commands">Commands</a></h3>
+      <h2 id="commands"><a href="#commands">Commands</a></h2>
 
-      <h4 id="replace">
+      <h3 id="replace">
         <a href="#replace"><code>replace</code></a>
-      </h4>
+      </h3>
 
       <p>
         The <code>replace</code> command takes a regular expression and replaces
@@ -195,9 +207,9 @@ repeat-me repeat-me but-not-me</code></pre>
         >.
       </p>
 
-      <h4 id="delete">
+      <h3 id="delete">
         <a href="#delete"><code>delete</code></a>
-      </h4>
+      </h3>
 
       <p>
         The <code>delete</code> command is syntactic sugar for
@@ -217,11 +229,30 @@ ME
 EOF
 Hello, world!</code></pre>
 
-      <h4 id="search">
+      <h3 id="search">
         <a href="#search"><code>search</code></a>
-      </h4>
+      </h3>
 
-      <p>TODO</p>
+      <p>
+        Sometimes you need to modify only files that match a regular expression
+        that is different than the regular expression given to the
+        <code>replace</code> command. <code>grep</code> can be used for this
+        kind of filtering, but it's awkward to use because, by default,
+        <code>grep</code> neither prints the matching file names nor uses a
+        regular expression syntax compatible with Python's
+        <code>re</code> module.
+      </p>
+
+      <p>
+        <code>search</code> is meant to simplify this use-case. Consider this
+        example:
+      </p>
+
+      <pre><code>$ echo 'Hello, world!' > my-file.txt
+$ echo 'Goodbye, world!' > my-other-file.txt
+$ xed replace world Alice $(xed search Hello *)
+Hello, Alice!
+Goodbye, world!</code></pre>
 
       <h2 id="more-info"><a href="#more-info">More Information</a></h2>
 

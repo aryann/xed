@@ -18,8 +18,12 @@ h5 {
   margin-top: 2rem;
 }
 
+a {
+  color: brown;
+}
+
 p {
-  margin: 1rem 0;
+  margin: 2rem 0;
 }
 
 li {
@@ -27,7 +31,7 @@ li {
 }
 
 *:target {
-  background-color: yellow;
+  background-color: lightgoldenrodyellow;
 }
 
 .main {
